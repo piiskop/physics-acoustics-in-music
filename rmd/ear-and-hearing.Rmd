@@ -1,0 +1,86 @@
+# Kõrv ja kuulmine
+
+## Teooria
+
+inimesed kuulevad sama sagedusega heli eri valjusega ning isegi sama inimene kuuleb eri sagedusega helisid, mis on tegelikult sama võimsusintensiivsusega, eri valjusega.
+
+## Eesmärk
+
+Oma kõrva samafooni kõver on määratud.
+
+## Töövahendid
+
+1. Arvuti.
+
+2. *WH-1000XM4* kõrvaklapid [@sony].
+
+3. Samavaljuse test võrgus [@equal].
+
+4. Suurima sageduse test võrgus [@hearing].
+
+## Heli samavaljusjoone mõõtmine iseendal
+
+### Töö käik
+
+1. Ühendasin kõrvaklapid arvutiga *Bluetooth*'i kaudu esimese peamise seadmena.
+
+2. Avasin samavaljuse testi saidi.
+
+3. Klikkisin heli sageduse $\qty{1}{\kHz}$ vertikaalselt keskel asuvale paneelile. Hindasin helivaljuse sobivaks: see ei olnud liiga vali ning ületas taustahelide valjuse. Märkisin graafikule \@ref(fig:equiphons) leheküljel `r render_pageref(reference = "fig:equiphons")` testitud heli sageduse ja valjuse.
+
+4. Klikkisin viimati testitud heli sagedusele vahetult vasemal asuvas tulbas samal kõrgusel olevale paneelile, kuulasin ja võrdlesin heli valjust. Kui heli valjus vasemas paneelis oli suurem kui paremas, klikkisin vasemast paneelist vahetult madalamal olevale paneelile. Kui ka see heli oli liiga vali võrreldes parema paneeli heliga, siis liikusin niimoodi testides mööda vasemaid paneele allapoole, kuni leidsin paneeli, mille heli valjus oli sama mis paremas paneelis. Kui vasema paneeli heli oli hoopis nõrgem võrreldes parema paneeli heliga, siis liikusin mööda vasemaid paneele ülespoole, kuni leidsin paneeli, mille heli valjus oli sama mis parema paneeli heli valjus. Märkisin vasema paneeli heli valjuse graafikule.
+
+5. Kordasin sammu 4 tegevusi, kuni vasemal polnud enam paneele.
+
+6. Klikkisin heli sagedusele $\qty{1}{\kHz}$ vahetult paremal asuvas tulbas samal kõrgusel olevale paneelile, kuulasin ja võrdlesin heli valjust. Kui heli valjus paremas paneelis oli suurem, klikkisin paremast paneelist vahetult madalamal olevale paneelile. Kui ka see heli oli liiga vali võrreldes parema paneeli heliga, siis liikusin niimoodi testides mööda paremaid paneele allapoole, kuni leidsin paneeli, mille valjus oli sama mis sagedusele $\qty{1}{\kHz}$ paneelis. Kui parema paneeli heli oli hoopis nõrgem võrreldes sageduse $\qty{1}{\kHz}$ heliga, siis liikusin mööda paremaid paneele ülespoole, kuni leidsin paneeli, mille heli valjus oli sama mis sageduse $\qty{1}{\kHz}$ heli valjus. Märkisin parema paneeli heli valjuse graafikule.
+
+7. Kordasin sammu 6 tegevusi, kuni paremal polnud enam paneele.
+
+8. Ühendasin graafikule kantud punktid sujuva joonega.
+
+9. Kordasin sammude 3-9 tegevusi saidil oleval uuemal mõõtmise vahendil.
+
+### Tulemus
+
+Samafoonid on esitatud joonisel \@ref(fig:equiphons) leheküljel `r render_pageref(reference = "fig:equiphons")`.
+
+```{r label = "equiphons", echo=FALSE, fig.cap = "Samafoonid. Rohelisega on märgitud juhendaja viidatud mõõtmisvahendiga testitud graafik, punasega uuema mõõtmisvahendiga testitud graafik. Musta värvi joonega on kirjeldatud n-ö keskmise noore täiskasvanud inimese kuulmist [@haynes_2014_crc(lk 14-52)] ja selle asukoht võrreldes muud värvi graafikutega ei pruugi olla õige."}
+include_external_graphics("rmd/samafoonid.svg")
+
+```
+
+juhendaja viidatud mõõtmisvahendiga ei kuulnud ma sagedusel $\qty{16}{\kHz}$ mitte midagi peale sahina, mis viitas sellele, et helifail küll mängib, aga heli kuulda ei ole. Uuema mõõtmisvahendiga kuulsin nimetatud sagedusel üksnes kõige valjemat heli ning sedagi ainult esimesel korral. Ilmselt see mõõtmisvahend siiski hästi ei toimi.
+
+### Arutelu
+
+minu saadud samavaljusjooned joonisel \@ref(fig:equiphons) leheküljel `r render_pageref(reference = "fig:equiphons")` kirjeldavad, kuidas ma tajusin sama valjust heli eri sagedustel. Kui võrreldes originaalsagedusega kuulsin sama valjusega heli mingil muul sagedusel valjemini, siis sellel muul sagedusel on mu kuulmine tundlikum. Kui võrreldes originaalsagedusega kuulsin sama valjusega heli mingil muul sagedusel vaiksemini, siis sellel muul sagedusel on mu kuulmine tundetum. Sagedusest $\qty{1}{\kHz}$ väiksema sagedusega heli kuulen järelikult enamasti tundetumalt ja sellest referentssagedusest suurema sagedusega heli enamasti tundlikumalt.
+
+Kandsin graafikule ka n-ö standardse noore täiskasvanud inimese kuulmise graafiku teosest *CRC Handbook
+of
+Chemistry and Physics* [@haynes_2014_crc(lk 14-52)]. Paigutasin selle musta graafikuna enda graafikutest veidi madalamale, sest ma ei usu, et mina inimese kuulmisvaljuse alampiiril midagi kuulen. Näeme, et musta graafiku kuju vastab vahemikus $\qtyrange{500}{5000}{\Hz}$ minu rohelisele graafikule. Keskmine täiskasvanud inimene kuuleb vastavalt graafikute kujule kehvemini kui mina helisid madalamal sagedusel kui $\qty{500}{\Hz}$ ja kõrgemal sagedusel kui $\qty{5000}{\Hz}$.
+
+Kahel erineval inimesel täpselt sama heli samavaljusjoon ei saa olla, kuivõrd pole olemas kaht täpselt ühesugust inimest. Samas, kui arvestada mõõtevahendis olevaid vahemikke, siis selle vahendiga mõõtes on küll võimalik, et lausa paljudel inimestel on samavaljusjoon ühesugune.
+
+Kui tahaksin joonistada samavaljusjoone muu valjusega helide kohta, siis selleks valin lävendsageduse $\qty{1}{\kHz}$ korral mingi muu algvaljuse referentsiks võrreldes sellega, mille oma eksperimendis valisin.
+
+Kuulmisläve fooni väärtus on null.
+
+Eksperimendi kaudu sain teada, et minu kuulmine on eri sagedusega helide puhul erinev. Eksperiment oli seetõttu edukas.
+
+## Heli kuulmise sageduste ulatus
+
+### Töö käik
+
+1. Ühendasin kõrvaklapid arvutiga *Bluetooth*'i kaudu esimese peamise seadmena.
+
+2. Avasin maksimaalse sageduse testi lehe.
+
+3. Testisin helifaili ja sättisin helivaljuse selliseks, et oleks mugav kuulata.
+
+4. Käivitasin helifaili algusest ja lasin sellel mängida, kuni ma peaaegu enam ei kuulnud, ning peatasin mängimise registreerides ühtlasi sageduse.
+
+5. Vaheldumisi lasin failil edasi mängida lühidalt, et kuuleksin, kas on veel kuulda või mitte. Kui oli kuulda, siis registreerisin sageduse ja jätkasin testimist, kuni enam kuulda ei olnud.
+
+### Tulemus
+
+Maksimaalne heli sagedus, mille puhul ma seda veel kuulsin, oli $\qty{14417}{\Hz}$.

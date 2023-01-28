@@ -1,0 +1,252 @@
+# Heli intensiivsus ja interferentsist
+
+## Heli intensiivsus
+
+### Teooria
+
+Heliallikast kaugenedes väheneb heli võimsusintensiivsus pöördvõrdeliselt kauguse ruuduga.
+
+### Eesmärk
+
+Uuritud, kuidas heli intensiivsus kahaneb kauguse kasvades.
+
+### Töövahendid
+
+1. Digitaalne heligeneraator [@online].
+
+2. Kõlar *SRS-XB20* [@support].
+
+3. Nutitelefon.
+
+4. Nutitelefoni rakendus *SPARKvue* [@sparkvue].
+
+5. Joonlaud skaalaga kuni $\qty{40,5}{\cm}$.
+
+### Töö käik
+
+1. Asetasin joonlaua lauale nii, et joonlaua mõõdiku algus oli kõlari väljundi vastas.
+
+2. Avasin *SPARKvue*.
+
+3. Lõin uue eksperimendi valides sensoriks sisseehitatud mikrofoni ning lasin mõõta nii helitaset kui -intensiivsust. Mõõtmismeetodiks valisin käsitsimõõtmise.
+
+4. Avasin digitaalse heligeneraatori ja käivitasin heli sinusoidgraafikuna sagedusel $\qty{440}{\Hz}$.
+
+5. Käivitasin mõõtmise.
+
+6. Paigutasin nutitelefoni lauale lebama, nii et mikrofon oli $\qty{5}{\cm}$ kaugusel kõlari väljundist.
+
+7. Fikseerisin helitaseme ja -intensiivsuse.
+
+8. Paigutasin nutitelefoni lauale lebama, nii et mikrofon oli $\qty{10}{\cm}$ kaugusel kõlari väljundist.
+
+9. Fikseerisin helitaseme ja -intensiivsuse.
+
+10. Paigutasin nutitelefoni lauale lebama, nii et mikrofon oli $\qty{20}{\cm}$ kaugusel kõlari väljundist.
+
+11. Fikseerisin helitaseme ja -intensiivsuse.
+
+12. Paigutasin nutitelefoni lauale lebama, nii et mikrofon oli $\qty{30}{\cm}$ kaugusel kõlari väljundist.
+
+13. Fikseerisin helitaseme ja -intensiivsuse.
+
+14. Paigutasin nutitelefoni lauale lebama, nii et mikrofon oli $\qty{40}{\cm}$ kaugusel kõlari väljundist.
+
+16. Fikseerisin helitaseme ja -intensiivsuse.
+
+16. Lõpetasin mõõtmise.
+
+17. Lülitasin heligeneraatori genereerima heli sagedusel $\qty{100}{\Hz}$.
+
+18. Kordasin samme 5-16.
+
+19. Lülitasin heligeneraatori välja.
+
+20. Eksportisin andmed Comma-Separated-Values-kujul.
+
+21. Koostasin eksporditud andmetega tabeli \@ref(tab:sound-levels) leheküljel `r render_pageref(reference = "tab:sound-levels")`.
+
+    ```{r label = "sound-levels"}
+imported_sound_levels <- read.table("rmd/akustika-2.csv", header = TRUE, sep = ",", dec = ".")
+    r_cm <- c(5, 10, 20, 30, 40)
+    r_m <- r_cm * 1e-2
+    I_at_440_Hz_calculated <- calculate_power_intensity(beta = imported_sound_levels$Sound.Level..dBC..Run.1)
+    I_at_440_Hz = imported_sound_levels$Sound.Intensity..µW.m...Run.1 * 1e-6
+    I_at_100_Hz_calculated <- calculate_power_intensity(beta = imported_sound_levels$Sound.Level..dBC..Run.2)
+    I_at_100_Hz = imported_sound_levels$Sound.Intensity..µW.m...Run.2 * 1e-6
+    
+    sound_levels <- data.frame(
+      r_cm = r_cm,
+      r_m = r_m,
+      L_at_440_Hz = imported_sound_levels$Sound.Level..dBC..Run.1,
+      I_at_440_Hz_calculated = I_at_440_Hz_calculated,
+      I_at_440_Hz = I_at_440_Hz,
+      L_at_100_Hz = imported_sound_levels$Sound.Level..dBC..Run.2,
+      I_at_100_Hz_calculated = I_at_100_Hz_calculated,
+      I_at_100_Hz = I_at_100_Hz
+    )
+        
+librarian::shelf(c(
+  "dplyr",
+  "kableExtra"
+))
+
+    colnames(sound_levels) <- c(
+      "$\\frac{\\mathrm{Kaugus}}{\\unit{\\cm}}$",
+      "$\\frac{\\mathrm{Kaugus}}{\\unit{\\m}}$",
+      "$\\frac{\\mathrm{Helitase}}{\\mathrm{dB}}$",
+      paste("$\\frac{\\text{Võimsusintensiivsus}}{\\unit{\\W\\per\\m\\squared}}$", footnote_marker_number(1)),
+      paste("$\\frac{\\text{Võimsusintensiivsus}}{\\unit{\\W\\per\\m\\squared}}$", footnote_marker_number(2)),
+      "$\\frac{\\text{Helitase}}{\\mathrm{dB}}$",
+      paste("$\\frac{\\text{Võimsusintensiivsus}}{\\unit{\\W\\per\\m\\squared}}$", footnote_marker_number(1)),
+      paste("$\\frac{\\text{Võimsusintensiivsus}}{\\unit{\\W\\per\\m\\squared}}$", footnote_marker_number(2))
+    )
+
+    print_table(
+      table = sound_levels,
+      caption = "Heli intensiivsus.",
+      digits = 7,
+      footnotes = c(
+        paste("minu koostatud funktsiooniga arvutatuna kasutades võimsusintensiivsuse valemit \\@ref(eq:power-intensity) leheküljel ", render_pageref(reference = "eq:power-intensity", escape = TRUE)), # 1
+        "$SPARKvue$ arvutatuna" # 2
+      ),
+      additional_header = c(
+        " " = 2,
+        "Sagedus $\\\\qty{440}{\\\\Hz}$" = 3,
+        "Sagedus $\\\\qty{100}{\\\\Hz}$" = 3
+      )
+    ) %>%
+      landscape()
+    
+    ```
+
+22. Koostasin graafiku, mille horisontaalsel teljel on kaugus ja püstisel teljel võimsusintensiivsus (joonis \@ref(fig:power-intensity-graphs) leheküljel `r render_pageref(reference = "fig:power-intensity-graphs")`).
+
+    ```{r label = "power-intensity-graphs", echo=FALSE, fig.cap="Võimsusintensiivsuse sõltuvus kaugusest."}
+librarian::shelf(c(
+  "ggplot2",
+  "latex2exp"
+))
+
+    colnames(sound_levels) <- c(
+      "$\\frac{\\mathrm{Kaugus}}{\\unit{\\cm}}$",
+      "$\\frac{\\mathrm{Kaugus}}{\\unit{\\m}}$",
+      "$\\frac{\\mathrm{Helitase}}{\\mathrm{dB}}$",
+      paste("$\\frac{\\text{Võimsusintensiivsus}}{\\unit{\\W\\per\\m\\squared}}$", footnote_marker_number(1)),
+      paste("$\\frac{\\text{Võimsusintensiivsus}}{\\unit{\\W\\per\\m\\squared}}$", footnote_marker_number(2)),
+      "$\\frac{\\text{Helitase}}{\\mathrm{dB}}$",
+      paste("$\\frac{\\text{Võimsusintensiivsus 100}}{\\unit{\\W\\per\\m\\squared}}$", footnote_marker_number(1)),
+      paste("$\\frac{\\text{Võimsusintensiivsus 100}}{\\unit{\\W\\per\\m\\squared}}$", footnote_marker_number(2))
+    )
+
+ggplot(data = sound_levels, aes(x = `$\\frac{\\mathrm{Kaugus}}{\\unit{\\m}}$`, y = I_at_440_Hz_calculated)) +
+  geom_point(shape = 23, color = "#008000", fill = "#008000", size = 3) +
+  labs(x = TeX("$\\frac{Kaugus}{m}$"), y = TeX("$\\frac{Võimsusintensiivsus}{\\frac{W}{m^2}}$ 440 Hz korral")) +
+  geom_point(mapping = aes(x = `$\\frac{\\mathrm{Kaugus}}{\\unit{\\m}}$`, y = I_at_100_Hz_calculated), color = "#ff6600", fill = "#ff6600", shape = 24, size = 3) +
+  scale_y_continuous(sec.axis = sec_axis(~., name = TeX("$\\frac{Võimsusintensiivsus}{\\frac{W}{m^2}}$ 100 Hz korral"))) +
+  theme(axis.title.y = element_text(colour = "#008000"), axis.text.y = element_text(colour = "#008000"), axis.ticks.y = element_line(colour = "#008000"), axis.title.y.right = element_text(colour = "#ff6600"), axis.ticks.y.right = element_line(colour = "#ff6600"), axis.text.y.right = element_text(colour = "#ff6600"))
+
+    ```
+
+### Arutelu
+
+Vastavalt võimsusintensiivsuse sõltuvuse valemile kaugusest heliallikast \@ref(eq:dependence-of-power-intensity-on-distance) leheküljel `r render_pageref(reference = "eq:dependence-of-power-intensity-on-distance")` on võimsusintensiivsus pöördruutsõltuvuses kaugusest heliallikast. Vastavalt sellele valemile: mida suurem on kaugus heliallikast, seda väiksem on võimsusintensiivsus. Jooniselt \@ref(fig:power-intensity-graphs) leheküljel `r render_pageref(reference = "fig:power-intensity-graphs")` on näha, et kui mikrofon oli kõlari väljundile hästi lähedal, siis oli heli võimsusintensiivsus võrdlemisi suur ja kaugenedes heli intensiivsus vähenes. Eriti hästi paistab see välja $\qty{100}{\Hz}$ heli puhul.
+
+```{r label = "calculating-perceived-change-in-I"}
+perceived_change_in_I <- calculate_power_intensity(beta = 2)
+
+```
+
+Inimkõrv tajub helitaseme muutumist üksnes paari detsibelli ulatuses [@giancoli_2014_physics(lk 332)], see on $\qty{`r as.character(signif(perceived_change_in_I, digits = 1))`}{\W\per\m\squared}$.
+
+Jooniselt on näha, et enamasti oli väiksema sagedusega heli võimsusintensiivsuse muutus suurem. Seega võib järeldada, et heli intensiivsuse kahanemine sõltub heli sagedusest. Samas, väikese vahemaa puhul oli väiksema sagedusega intensiivsuse muutus väiksem kui suurema sagedusega heli puhul, nii et otsest sõltuvust ei saa välja lugeda. Suurema sagedusega olev heli kipub heliallikast teatud kauguses hajuma, kui kuni selle kauguseni ilmselt muutub heliintensiivsus sõltumata sagedusest.
+
+## Interferents
+
+### Teooria
+
+Kohas, kus eri heliallikatest pärit helilainete laineharjad- või nõod liituvad, on tajutav heli kõige võimsam. Kohas, kus ühest heliallikast pärit heli lainehari kohtub teisest heliallikast pärit heli lainepõhjaga, kostub heli kõige vaiksemalt.
+
+### Eesmärk
+
+Uuritud, kuidas tekib heli interferents ja kuidas me seda kuuleme.
+
+### Töövahendid
+
+1. Digitaalne heligeneraator [@online].
+
+2. *SRS-XB20* kõlar [@support].
+
+3. *Redmi Note 10 Pro* nutitelefon mõõtmiseks.
+
+4. Nutitelefoni rakendus *SPARKvue* [@sparkvue].
+
+5. *LG X screen*i nutitelefon teise kõlarina.
+
+6. Mõõdulint.
+
+7. Eraldi arvuti vahendina 2 märgitud kõlariga ühendamiseks.
+
+### Töö käik
+
+1. Sättisin kõlarid üksteise kõrvale.
+
+2. Tekitasin ruumi virtuaalse võrgu nii, et iga sõlm asuks visuaalselt meeldejäävas kohas. Mõõtsin iga sõlme kauguse ühest seinast ning seinaga risti olevast kõlaritesihist ning märkisin kaugused üles.
+
+3. Avasin *SPARKvue*.
+
+4. Lõin uue eksperimendi valides sensoriks sisseehitatud mikrofoni ning lasin mõõta nii helitaset kui -intensiivsust. Mõõtmismeetodiks valisin käsitsimõõtmise.
+
+5. Avasin digitaalse heligeneraatori sülearvutis ja käivitasin heli sinusoidgraafikuna sagedusel $\qty{440}{\Hz}$.
+
+6. Avasin digitaalse heligeneraatori vahendis 5 ja käivitasin heli sinusoidgraafikuna sagedusel $\qty{440}{\Hz}$.
+
+7. Sättisin kummagi kõlari helivaljuse sarnaseks.
+
+8. Käivitasin mõõtmise.
+
+9. Liikusin järjest läbi kõik virtuaalse võrgu sõlmed ja igas sõlmes registreerisin helitaseme.
+
+10. Lõpetasin mõõtmise.
+
+11. Paigutasin kõlarid üksteisest eemale jättes need samale sammul 2 mainitud kõlaritesihile.
+
+12. Kordasin samme 8-10.
+
+13. Lõpetasin heligeneraatorite genereerimise.
+
+14. Eksportisin andmed Comma-Separated-Values-vormingus.
+
+15. Käivitasin heligeneraatori vahendisse 2 sagedusel $\qty{500}{\Hz}$.
+
+16. Käivitasin heligeneraatori vahendisse 5 sagedusel $\qty{500}{\Hz}$.
+
+17. Asetasin vahendi 2 endast $\qty{2}{\m}$ kaugusele ja vahendi 5 endast $\qty{1,4}{\m}$ kaugusele.
+
+18. Kogesin heli nii sammul 17 nimetatud enda asukohas kui sellest veidi eemal ühe kõrvaga ja kahe kõrvaga.
+
+### Tulemused
+
+Tulemused kõlarite üksteise kõrval paiknemise korral tehtud mõõtmiste järel on esitatud joonisel \@ref(fig:interference-speakers-together) leheküljel `r render_pageref(reference = "fig:interference-speakers-together")` ja tulemused kõlarite üksteisest eemal paiknemise korral tehtud mõõtmiste järel on esitatud joonisel \@ref(fig:interference-speakers-apart) leheküljel `r render_pageref(reference = "fig:interference-speakers-apart")`.
+
+```{r label = "interference-speakers-together", echo=FALSE, fig.cap = "Helilainete interferents kõlarite üksteise kõrval paiknemise korral. Konstruktiivse interferentsi alad on esitatud pruuni värviga, destruktiivse interferentsi alad sinise värviga."}
+include_external_graphics("rmd/interference-speakers-together.png")
+
+```
+
+```{r label = "interference-speakers-apart", echo=FALSE, fig.cap = "Helilainete interferents kõlarite üksteisest eemal paiknemise korral. Konstruktiivse interferentsi alad on esitatud pruuni värviga, destruktiivse interferentsi alad sinise värviga."}
+include_external_graphics("rmd/interference-speakers-apart.png")
+
+```
+
+### Arutelu
+
+Kohtades, kus kummagi kõlari helilainete harjad või põhjad liitusid, oli helitase kõige kõrgem. Kohtades, kus ühe kõlari helilaine hari ja teise kõlari helilaine põhi liitusid, oli helitase kõige madalam. Mõõta neid kohti kõrvakuulmise järgi oli üsna võimatu, sest seleks pidanuks hoidma nutitelefoni mikrofoni täpselt kõrva juures ja oskama vajutada õigele virtuaalsele nupule. Seetõttu veendusin eelnevalt, et ruumis esinevad eri helivaljusega kohad, ning toimetasin mõõtmise hiljem eraldi.
+
+Kui kõlarid olid üksteisest eemal, siis oli valjemaid ja vaiksemaid kohti lihtsam eristada.
+
+Juhendis kästakse vaadata illustratsioonipilti interferentspildi kohta ühelt lehelt, mida enam ei ole. Seetõttu ma ei saanud ka sellel pildil midagi teha.
+
+Heli sagedusel $\qty{500}{\Hz}$ kogemine kahest eri kaugusel olevast kõlarist kahe kõrvaga andis ainult mõju, et ma ei saanud aru, kuskohast heli täpselt tuleb. Kui kuulasin ainult ühe kõrvaga, siis ühest kõlarist $\qty{2}{\m}$ ja teisest $\qty{1,4}{\m}$ kaugusel olles oli helitase madalam kui ümbruskonnas. Järelikult oli selles punktis tegemist destruktriivse interferentsiga.
+
+Kahe või enama helilaine interferentsi tuleb arvestada ruumides, kus heli peab ühtlaselt kostuma. Destruktiivset interferentsi saab kasutada kõrvaklappides ümbritseva müra summutamiseks. Selleks salvestavad kõrvaklapid välist müra ja mängivad seda kõrva pärismüraga sirgnurga all faasinihkes. Kui on vaja hoopis destruktiivset inteferentsi minimeerida, toimetatakse vastupidi ja pannakse kõlarid sõltuvalt asukohast mängima üksteise suhtes faasinihkes. [@a2022_183].

@@ -1,0 +1,221 @@
+# Intervallid
+
+## Teooria
+
+Helitoonidel on igaühel oma sagedus, mille suhe tähendab heliintervalli. Sõltuvalt sageduste suhtest on helide kooskõla meeldiv kuulata või mitte.
+
+## Eesmärgid
+
+1. Intervallid kui sageduste suhted uuritud.
+
+2. Konsonantsete ja dissonantsete kooskõlade tekkimine mõistetud.
+
+## Töövahendid
+
+1. Multiple Tone Generator [@multiple].
+
+2. *Audacity* [@audacity_2019_audacity].
+
+## Töö käik
+
+1. Vastavalt juhendile *Recording desktop audio* [@a2023_recording] seadistasin *Audacity* salvestama arvuti väljundheli.
+
+2. Avasin vahendi 1.
+
+3. Lülitasin sisse väikese sekundi [@watson_2022_musical] helid [@haynes_2014_crc(lk 14-51)].
+
+4. Jäädvustasin *Audacity*'ga mõne sekundi seda helidekombinatsiooni.
+
+5. Lülitasin helid välja.
+
+6. Lasin kuvada graafiku vastavalt juhendile *Plot Spectrum* [@plot] valides valimi suuruseks 32768.
+
+7. Liigutasin hiirekursoriga iga kõrgeima tipu alale ja tuvastasin kõikvõimalikud eri sagedused, mille *Audacity* ära tundis, ja täitsin saadud andmetega tabelit \@ref(tab:intervals) leheküljel `r render_pageref(reference = "tab:intervals")`.
+
+8. Lisasin tabelisse referentsnootide andmed [@haynes_2014_crc(lk 14-51)].
+
+9. Lülitasin sisse suure sekundi (juhendis on terts) helid.
+
+10. Kordasin samme 4-8.
+
+11. Lülitasin sisse väikese tertsi heild.
+
+12. Kordasin samme 4-8.
+
+13. Lülitasin sisse suure tertsi helid.
+
+14. Kordasin samme 4-8.
+
+15. Lülitasin sisse puhta kvardi helid.
+
+16. Kordasin samme 4-8.
+
+17. Lülitasin sisse puhta kvindi helid.
+
+18. Kordasin samme 4-8.
+
+19. Lülitasin sisse suure seksti helid.
+
+20. Kordasin samme 4-8.
+
+21. Lülitasin sisse väikese septimi helid.
+
+22. Kordasin samme 4-8.
+
+23. Lülitasin sisse suure septimi helid.
+
+24. Kordasin samme 4-8.
+
+25. Lülitasin sisse puhta oktaavi helid.
+
+26. Kordasin samme 4-8.
+
+27. Lasin arvutada sageduste suhted.
+
+28. Lülitasin sisse toonika kolmkõla helid [@bayer_2022_what].
+
+29. Kordasin samme 4-6.
+
+30. Liigutasin hiirekursori iga kõrgeima tipu alale ja tuvastasin kõikvõimalikud eri sagedused, mille *Audacity* ära tundis, ja täitsin saadud andmetega tabelit \@ref(tab:triads) leheküljel `r render_pageref(reference = "tab:triads")`.
+
+31. Lisasin tabelisse referentsnootide andmed [@haynes_2014_crc(lk 14-51)].
+
+32. Lülitasin sisse sekstakordi helid [@a2022_sixth].
+
+33. Kordasin samme 29-31.
+
+34. Lülitasin sisse dissonantse kolmkõla helid [@grimm_constructing].
+
+35. Kordasin samme 29-31.
+
+36. Lasin arvutada sageduste suhted.
+
+## Tulemused
+
+Kakskõlade tulemused on kantud tabelisse \@ref(tab:intervals) leheküljel `r render_pageref(reference = "tab:intervals")`.
+
+```{r label = "intervals"}
+note_1 <- c("$\\mathrm{C_4}$", "$\\mathrm{C_4}$", "$\\mathrm{C_4}$", "$\\mathrm{C_4}$", "$\\mathrm{C_4}$", "$\\mathrm{C_4}$", "$\\mathrm{C_4}$", "$\\mathrm{C_4}$", "$\\mathrm{C_4}$", "$\\mathrm{C_4}$")
+note_2 <- c("$\\mathrm{C\\#_4}$", "$\\mathrm{D_4}$", "$\\mathrm{D\\#_4}$", "$\\mathrm{E_4}$", "$\\mathrm{F_4}$", "$\\mathrm{G_4}$", "$\\mathrm{A_4}$", "$\\mathrm{A\\#_4}$", "$\\mathrm{B_4}$", "$\\mathrm{C_5}$")
+f_1 <- c(262, 262, 262, 262, 262, 262, 262, 262, 262, 262)
+f_2 <- c(277, 294, 311, 330, 349, 392, 440, 466, 494, 523)
+f_1_reference <- c(261.63, 261.63, 261.63, 261.63, 261.63, 261.63, 261.63, 261.63, 261.63, 261.63)
+f_2_reference <- c(277.18, 293.66, 311.13, 329.63, 349.23, 392, 440, 466.16, 493.88, 523.25)
+f_2_over_f_1 <- f_2 / f_1
+f_2_reference_over_f_1_reference <- f_2_reference / f_1_reference
+
+intervals = data.frame(
+  note_1 = note_1,
+  note_2 = note_2,
+  f_1 = f_1,
+  f_2 = f_2,
+  f_1_reference = f_1_reference,
+  f_2_reference = f_2_reference,
+  f_2_over_f_1 = f_2_over_f_1,
+  f_2_reference_over_f_1_reference = f_2_reference_over_f_1_reference
+)
+
+colnames(intervals) = c(
+  "1. noot",
+  "2. noot",
+  "$\\frac{\\text{1. noodi sagedus}}{\\unit{\\Hz}}$",
+  "$\\frac{\\text{2. noodi sagedus}}{\\unit{\\Hz}}$",
+  "$\\frac{\\text{1. referentsnoodi sagedus}}{\\unit{\\Hz}}$",
+  "$\\frac{\\text{2. referentsnoodi sagedus}}{\\unit{\\Hz}}$",
+  "Mõõdetud nootide sageduste suhe",
+  "Referentsnootide ligikaudne sageduste suhe"
+)
+
+rownames(intervals) = c(
+  "m2",
+  "M2",
+  "m3",
+  "M3",
+  "P4",
+  "P5",
+  "M6",
+  "m7",
+  "M7",
+  "P8"
+)
+        
+librarian::shelf(c(
+  "dplyr",
+  "kableExtra"
+))
+
+print_table(table = intervals, caption = "Intervallide sagedused.") %>% column_spec(8, width = "5em") %>% column_spec(9, width = "5em") %>% landscape()
+
+```
+
+Kolmkõlade tulemused on kantud tabelisse \@ref(tab:triads) leheküljel `r render_pageref(reference = "tab:triads")`.
+
+```{r label = "triads"}
+f_tonic_1 <- 261.63
+f_tonic_2 <- 329.63
+f_tonic_3 <- 392
+f_sext_3 <- 523.25
+f_dissonant_2 <- 466.16
+f_dissonant_3 <- 554.37
+note_in_triad_1 <- c("$\\mathrm{C_4}$", "$\\mathrm{E_4}$", "$\\mathrm{G_4}$")
+note_in_triad_2 <- c("$\\mathrm{E_4}$", "$\\mathrm{G_4}$", "$\\mathrm{A\\#_4}$")
+note_in_triad_3 <- c("$\\mathrm{G_4}$", "$\\mathrm{C_5}$", "$\\mathrm{C\\#_5}$")
+f_in_triad_1 <- c(f_tonic_1, f_tonic_2, f_tonic_3)
+f_in_triad_2 <- c(f_tonic_2, f_tonic_3, f_dissonant_2)
+f_in_triad_3 <- c(f_tonic_3, f_sext_3, f_dissonant_3)
+ratio_tonic_2_1 <- f_tonic_2 / f_tonic_1
+ratio_tonic_3_1 <- f_tonic_3 / f_tonic_1
+ratio_sext_2_1 <- f_tonic_3 / f_tonic_2
+ratio_sext_3_1 <- f_sext_3 / f_tonic_2
+ratio_dissonant_2_1 <- f_dissonant_2 / f_tonic_3
+ratio_dissonant_3_1 <- f_dissonant_3 / f_tonic_3
+ratio <- c(paste(signif(ratio_tonic_3_1, digits = 5), signif(ratio_tonic_2_1, digits = 5), 1, sep = ":"), paste(signif(ratio_sext_3_1, digits = 5), signif(ratio_tonic_2_1, digits = 5), 1, sep = ":"), paste(signif(ratio_dissonant_3_1, digits = 5), signif(ratio_dissonant_2_1, digits = 5), 1, sep = ":"))
+
+triads <- data.frame(
+  note_in_triad_1 = note_in_triad_1,
+  note_in_triad_2 = note_in_triad_2,
+  note_in_triad_3 = note_in_triad_3,
+  f_in_triad_1 = f_in_triad_1,
+  f_in_triad_2 = f_in_triad_2,
+  f_in_triad_3 = f_in_triad_3,
+  ratio = ratio
+)
+
+colnames(triads) <- c(
+  "1. noot",
+  "2. noot",
+  "3. noot",
+  "$\\mathrm{\\frac{\\text{1. noodi sagedus}}{\\unit{\\Hz}}}$",
+  "$\\mathrm{\\frac{\\text{2. noodi sagedus}}{\\unit{\\Hz}}}$",
+  "$\\mathrm{\\frac{\\text{3. noodi sagedus}}{\\unit{\\Hz}}}$",
+  "Kolmkõla sageduste suhe"
+)
+
+rownames(triads) <- c(
+  "Toonika kolmkõla",
+  "Sekstakord",
+  "Dissonantne kolmkõla"
+)
+        
+librarian::shelf(c(
+  "dplyr",
+  "kableExtra"
+))
+
+print_table(table = triads, caption = "Konsonantne ja dissonantne kolmkõla.") %>% landscape()
+
+```
+
+## Arutelu
+
+Mõõdetud intervallide nootide suhe oli sama mis referentsnootide sageduste suhe. Graafikult saab välja lugeda, millise sagedusega helid on kõige võimsamad. Kuna nende helide sagedused olid mul sisestatud heligeneraatorisse ja see tegi järelikult õige sagedusega heli, mida *Audacity* oskas ka õigesti analüüsida. Tarkvara näitas küll sagedusi täisarvulisena, mis olid referentsraamatus esitatud arvud ümardatuna. Nii kujunesidki sageduste suhted ühesuguseks.
+
+mulle tundub, et igasugune testitud helide kooskõla n-ö kriipis kõrva, välja arvatud puhas oktaav. Seega peaks sageduste suhe olema täisarvuline, et kooskõla oleks minu jaoks konsonantne.
+
+Puhta oktaavi puhul võngub heli noodi $\mathrm{C_4}$ puhul kaks korda, et täis saada liitlaine periood. Seejuures võngub heli noodi $\mathrm{C_5}$ puhul ühe korra.
+
+Puhta kvindi puhul võngub heli noodi $\mathrm{C_4}$ puhul kolm korda, et täis saada liitlaine periood. Seejuures võngub heli noodi $\mathrm{G_4}$ puhul kaks korda.
+
+Dissonantses kolmkõlas on kasutuses noote, millega koos kolmkõla ei ole meeldiv kuulata. Konsonantses kolmkõlas selliseid noote kasutuses pole. Dissonantset kolmkõla kuuleme dissonantsena, kuna selle helide sageduste suhe on dissonantne.
+
+Muusika on produkt, mille tootmine põhineb füüsikal ja matemaatikal isegi siis, kui muusika looja neid valdkondi ei kasuta. Kõik siin maailmas võngub mingil sagedusel ning see, kuidas selle maailma osad kokku sobivad, sõltub, kuidas võnkesagedused kokku sobivad.

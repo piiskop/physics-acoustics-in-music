@@ -4,11 +4,10 @@ site: bookdown::bookdown_site
 author: "peacecop kalmer:"
 colorlinks: TRUE
 date: "`r Sys.Date()`"
-description: "This is the manual for creating content using RStudio Server."
-lang: en
-title: |
-    Manual for creating content using  
-    RStudio Server
+description: "Tallinna Ülikooli akustika muusikas kursuse peacecop kalmeri: raport"
+lang: et
+include-before:
+    - \input{title-page.tex}
 
 documentclass: book
 papersize: a4
@@ -21,6 +20,7 @@ mainfont: DejaVu Serif # for displaying both Chinese symbols and emojis
 CJKmainfont: Droid Sans Fallback
 
 bibliography: [references.bib]
+csl: apa-numeric-superscript-brackets.csl
 link-citations: yes
 
 lof: yes
@@ -47,6 +47,8 @@ local({
     hook_source(x, options)
   })
 })
+
+options(OutDec = ",")
 
 if (!require("librarian")) {
   install.packages("librarian", dependencies = TRUE)
@@ -183,14 +185,20 @@ render_with_emojis <- function(text) {
 #' This function renders a reference to a page as it cannot be used in the web output.
 #' 
 #' @param reference the reference identifier
+#' @param escape Do we need to double-escape because we call the function from a table generation function?
 #' 
 #' @returns the rendered page reference
-render_pageref <- function(reference) {
+render_pageref <- function(reference, escape = FALSE) {
   
   if (knitr::is_html_output()) {
     rendered_pageref <- ""
   } else {
-    rendered_pageref <- paste(" $\\pageref{", reference, "}$", sep = "")
+    
+    if (escape) {
+      rendered_pageref <- paste(" $\\\\pageref{", reference, "}$", sep = "")
+    } else {
+      rendered_pageref <- paste(" $\\pageref{", reference, "}$", sep = "")
+    }
   }
 
   return(rendered_pageref)
@@ -215,23 +223,79 @@ render_color <- function(color, text) {
 
 ```
 
-# Introduction
+# Reeglistik
 
-Once upon a time, a student asked me to help him in R. i had no experience with R, however i gave it a chance. i installed RStudio Server. Months passed after my first use until i needed it for my stuff. i was studying statistics in a university and our teacher wanted us to create our solutions using a spreadsheet program. i saw that using R, i could learn more useful stuff and moved on RStudio Server. i learnt to create output using *bookdown* which is a library that can be used for creating websites or e-books while including calculations and graphs. As *bookdown* has a steap learning curve, i want to elaborate it here. Template strings are marked with angle brackets.
-
-For me, regarding cross-references, the following things are important:
-
-1. It must be possible to cross-reference between files.
-
-2. R code in one file must be accessible in another file.
-
-3. Citations in table captions using `kableStyling` must be possible.
-
-Currently, *bookdown* supports all of them.
-
-we can see the workflow of from the written markdown to the ready output on the figure \@ref(fig:workflow).
-
-```{r label = "workflow", fig.cap = paste("The workflow from the written markdown to the ready output using *bookdown*", render_with_emojis(text = "((ref:riederer-122))"), ".", sep = "")}
-include_external_graphics("rmd/workflow.png")
+```{r}
+I_0 <- 1e-12
 
 ```
+
+Inimese kuulmislävel on võimsustihedus $\qty{`r as.character(I_0)`}{\W\per\m\squared}$ [@haynes_2014_crc(lk 14-52)].
+
+Helitaseme arvutamiseks võimsustiheduste järgi saab kasutada valemit \@ref(eq:sound-level) leheküljel `r render_pageref(reference = "eq:sound-level")`. Selle valemi dimensionaalanalüüs on esitatud avaldises \@ref(eq:dimensional-analysis-of-sound-level) leheküljel `r render_pageref(reference = "eq:dimensional-analysis-of-sound-level")`, millest johtuvalt on ühik 1 või spetsiifiliselt detsibell.
+
+```{=tex}
+\begin{align}
+\beta = 10 \times \mathrm{log}(\frac{I}{\qty{`r as.character(I_0)`}{\W\per\m\squared}})
+(\#eq:sound-level)
+\end{align}
+
+```
+
+[@giancoli_2014_physics(lk 331)].
+
+```{=tex}
+\begin{align}
+1 \times \mathrm{log}(\frac{\mathrm{\frac{M \times L \times L}{T^3 \times L^2}}}{\mathrm{\frac{M \times L \times L}{T^3 \times L^2}}}).
+(\#eq:dimensional-analysis-of-sound-level)
+\end{align}
+
+```
+
+```{r label = "calculate-sound-level"}
+#' This function calculates the sound level.
+#' 
+#' @param I the power intensity
+#' 
+#' @returns the sound level
+calculate_sound_level <- function(I) {
+  return(10 * log10(I / I_0))
+}
+
+```
+
+Avaldan helitaseme valemist \@ref(eq:sound-level) leheküljel `r render_pageref(reference = "eq:sound-level")` võimsusintensiivsuse avaldises \@ref(eq:power-intensity) leheküljel `r render_pageref(reference = "eq:power-intensity")`
+
+```{=tex}
+\begin{align}
+\frac{\beta}{10} &= \mathrm{log}(\frac{I}{\qty{`r as.character(I_0)`}{\W\per\m\squared}}) \\
+10^{\frac{\beta}{10}} &= \frac{I}{\qty{`r as.character(I_0)`}{\W\per\m\squared}} \\
+I &= \qty{`r as.character(I_0)`}{\W\per\m\squared} \times 10^{\frac{\beta}{10}}.
+(\#eq:power-intensity)
+\end{align}
+
+```
+
+```{r label = "calculate-power-intensity"}
+#' This function calculates the power intensity.
+#' 
+#' @param beta the sound level
+#' 
+#' @returns the power intensity
+calculate_power_intensity <- function(beta) {
+  return(I_0 * 10^(beta / 10))
+}
+
+```
+
+Võimsusintensiivsuse sõltuvus kaugusest on esitatud avaldises \@ref(eq:dependence-of-power-intensity-on-distance) leheküljel `r render_pageref(reference = "eq:dependence-of-power-intensity-on-distance")`.
+
+```{=tex}
+\begin{align}
+I = \frac{P}{4 \times \pi \times r^2},
+(\#eq:dependence-of-power-intensity-on-distance)
+\end{align}
+
+```
+
+milles $P$ on võimsus ja $r$ kaugus heliallikast [@giancoli_2014_physics(lk 310)].
